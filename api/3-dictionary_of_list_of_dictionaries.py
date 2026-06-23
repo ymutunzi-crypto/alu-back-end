@@ -13,7 +13,10 @@ if __name__ == "__main__":
     # 1. Fetch all users to create a dictionary mapping user ID to username
     users_res = requests.get(url + "users")
     users_data = users_res.json()
-    user_map = {user.get("id"): user.get("username") for user in users_data}
+    # Broken down to keep line lengths strictly under 79 characters
+    user_map = {
+        user.get("id"): user.get("username") for user in users_data
+    }
 
     # 2. Fetch all tasks from the endpoint
     todos_res = requests.get(url + "todos")
