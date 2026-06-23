@@ -10,36 +10,41 @@ import requests
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com/"
 
-    # 1. Fetch all users to create a dictionary mapping user ID to username
+    # Fetch users
     users_res = requests.get(url + "users")
     users_data = users_res.json()
-    # Broken down to keep line lengths strictly under 79 characters
-    user_map = {
-        user.get("id"): user.get("username") for user in users_data
-    }
+    
+    # Broken down user_map
+    user_map = {}
+    for user in users_data:
+        u_id = user.get("id")
+        user_map[u_id] = user.get("username")
 
-    # 2. Fetch all tasks from the endpoint
+    # Fetch tasks
     todos_res = requests.get(url + "todos")
     todos_data = todos_res.json()
 
-    # 3. Build the primary dictionary tracking all users
+    # Build primary dictionary
     all_employees_data = {}
 
-    # Initialize empty lists for every valid user ID first
+    # Initialize keys safely across short lines
     for user_id in user_map.keys():
-        all_employees_data[str(user_id)] = []
+        str_id = str(user_id)
+        all_employees_data[str_id] = []
 
-    # 4. Populate each user's task list matching the exact key sequence required
+    # Populate tasks with strict line-length safety
     for task in todos_data:
         u_id = task.get("userId")
         if u_id in user_map:
-            all_employees_data[str(u_id)].append({
+            str_id = str(u_id)
+            task_dict = {
                 "username": user_map.get(u_id),
                 "task": task.get("title"),
                 "completed": task.get("completed")
-            })
+            }
+            all_employees_data[str_id].append(task_dict)
 
-    # 5. Save the compiled dictionary to the required file name
+    # Save to file
     file_name = "todo_all_employees.json"
     with open(file_name, mode="w") as json_file:
         json.dump(all_employees_data, json_file)
