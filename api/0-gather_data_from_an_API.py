@@ -15,7 +15,6 @@ if __name__ == "__main__":
     user_data = user_res.json()
     employee_name = user_data.get("name")
 
-    # Shortened to keep line lengths strictly under 79 characters
     todos_res = requests.get(url + "todos", params={"userId": emp_id})
     todos_data = todos_res.json()
 
